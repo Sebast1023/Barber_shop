@@ -1,0 +1,472 @@
+/* =========================
+   PÁGINA DE CITAS
+   ========================= */
+
+.appointments-page {
+
+    min-height: 100vh;
+
+    padding: 140px 8% 80px;
+
+    background-color: #0d0d0d;
+
+}
+
+
+/* =========================
+   ENCABEZADO
+   ========================= */
+
+.logo img {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+    display: block;
+}
+
+.appointments-header {
+
+    max-width: 1100px;
+
+    margin: 0 auto 50px;
+
+}
+
+
+.appointments-header p {
+
+    color: #d4af37;
+
+    font-size: 11px;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.appointments-header h1 {
+
+    font-size: 48px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.appointments-header span {
+
+    color: #888;
+
+    font-size: 15px;
+
+}
+
+
+/* =========================
+   CONTENEDOR
+   ========================= */
+
+.appointments-container {
+
+    max-width: 1100px;
+
+    margin: auto;
+
+}
+
+
+.appointments-section {
+
+    margin-bottom: 60px;
+
+}
+
+
+/* =========================
+   TÍTULOS
+   ========================= */
+
+.section-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+}
+
+
+.section-heading h2 {
+
+    font-size: 25px;
+
+}
+
+
+.new-appointment {
+
+    padding: 10px 17px;
+
+    background-color: #d4af37;
+
+    color: #111;
+
+    border-radius: 5px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================
+   CITA
+   ========================= */
+
+.appointment-item {
+
+    display: flex;
+
+    gap: 25px;
+
+    padding: 25px;
+
+    margin-bottom: 15px;
+
+    background-color: #151515;
+
+    border: 1px solid #292929;
+
+    border-radius: 8px;
+
+    transition: 0.3s;
+
+}
+
+
+.appointment-item:hover {
+
+    border-color: #444;
+
+}
+
+
+/* =========================
+   CALENDARIO
+   ========================= */
+
+.appointment-calendar {
+
+    width: 80px;
+
+    min-width: 80px;
+
+    height: 90px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background-color: #d4af37;
+
+    color: #111;
+
+    border-radius: 5px;
+
+}
+
+
+.appointment-calendar span {
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+}
+
+
+.appointment-calendar strong {
+
+    font-size: 30px;
+
+    line-height: 1.1;
+
+}
+
+
+/* =========================
+   INFORMACIÓN
+   ========================= */
+
+.appointment-details {
+
+    flex: 1;
+
+}
+
+
+.appointment-title {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+}
+
+
+.appointment-title h3 {
+
+    font-size: 18px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.appointment-status {
+
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    background-color: #192016;
+
+    color: #8fbd75;
+
+    border-radius: 15px;
+
+    font-size: 10px;
+
+}
+
+
+.appointment-price {
+
+    color: #d4af37;
+
+    font-size: 18px;
+
+}
+
+
+/* =========================
+   DATOS
+   ========================= */
+
+.appointment-data {
+
+    display: flex;
+
+    gap: 25px;
+
+    margin-top: 18px;
+
+}
+
+
+.appointment-data span {
+
+    color: #888;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================
+   ACCIONES
+   ========================= */
+
+.appointment-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    margin-top: 18px;
+
+}
+
+
+.cancel-button {
+
+    padding: 8px 13px;
+
+    background-color: transparent;
+
+    border: 1px solid #3b3b3b;
+
+    border-radius: 5px;
+
+    color: #888;
+
+    font-size: 11px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+}
+
+
+.cancel-button:hover {
+
+    border-color: #b85c5c;
+
+    color: #d47a7a;
+
+}
+
+
+/* =========================
+   HISTORIAL
+   ========================= */
+
+.history {
+
+    margin-top: 20px;
+
+}
+
+
+.history-item {
+
+    display: grid;
+
+    grid-template-columns: 1fr 180px 120px;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 20px;
+
+    margin-bottom: 10px;
+
+    background-color: #151515;
+
+    border: 1px solid #292929;
+
+    border-radius: 7px;
+
+}
+
+
+.history-item h3 {
+
+    font-size: 14px;
+
+    margin-bottom: 5px;
+
+}
+
+
+.history-item span {
+
+    color: #777;
+
+    font-size: 11px;
+
+}
+
+
+.history-item > div:last-child {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    gap: 5px;
+
+}
+
+
+.history-item strong {
+
+    color: #ddd;
+
+}
+
+
+.completed-status {
+
+    color: #777 !important;
+
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 700px) {
+
+    .appointments-page {
+
+        padding-left: 5%;
+
+        padding-right: 5%;
+
+    }
+
+
+    .appointments-header h1 {
+
+        font-size: 38px;
+
+    }
+
+
+    .appointment-item {
+
+        flex-direction: column;
+
+    }
+
+
+    .appointment-data {
+
+        flex-direction: column;
+
+        gap: 8px;
+
+    }
+
+
+    .appointment-title {
+
+        gap: 15px;
+
+    }
+
+
+    .history-item {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .history-item > div:last-child {
+
+        align-items: flex-start;
+
+    }
+
+}

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Agendar cita | Barbería</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/agenda.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+         ========================= -->
+
+    <header>
+        <nav class="navbar">
+
+            <a href="../index.html" class="logo">
+                <img src="../img/Logo.jpg" alt="Logo de la barbería">
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../index.html#servicios">Servicios</a></li>
+                <li><a href="../index.html#barberos">Barberos</a></li>
+                <li><a href="../index.html#contacto">Contacto</a></li>
+            </ul>
+
+            <div class="nav-buttons">
+                <a href="login.html" class="btn-login">
+                    Iniciar sesión
+                </a>
+            </div>
+
+        </nav>
+    </header>
+
+
+    <!-- =========================
+         AGENDA
+         ========================= -->
+
+    <main class="booking-page">
+
+        <div class="booking-header">
+
+            <p>RESERVA TU MOMENTO</p>
+
+            <h1>Agenda tu cita</h1>
+
+            <span>
+                Elige el servicio, tu barbero y el horario
+                que más te convenga.
+            </span>
+
+        </div>
+
+
+        <div class="booking-container">
+
+            <!-- FORMULARIO -->
+
+            <section class="booking-form">
+
+                <div class="booking-step">
+
+                    <span class="step-number">01</span>
+
+                    <div class="step-content">
+
+                        <h2>Selecciona tu servicio</h2>
+
+                        <div class="service-options">
+
+                            <button class="service-option">
+
+                                <div>
+                                    <h3>Corte clásico</h3>
+                                    <p>40 minutos</p>
+                                </div>
+
+                                <strong>$25.000</strong>
+
+                            </button>
+
+
+                            <button class="service-option">
+
+                                <div>
+                                    <h3>Corte + barba</h3>
+                                    <p>60 minutos</p>
+                                </div>
+
+                                <strong>$35.000</strong>
+
+                            </button>
+
+
+                            <button class="service-option">
+
+                                <div>
+                                    <h3>Diseño de barba</h3>
+                                    <p>30 minutos</p>
+                                </div>
+
+                                <strong>$18.000</strong>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="booking-step">
+
+                    <span class="step-number">02</span>
+
+                    <div class="step-content">
+
+                        <h2>Elige tu barbero</h2>
+
+                        <div class="barber-options">
+
+                            <button class="barber-option">
+
+                                <div class="barber-avatar">
+                                    JP
+                                </div>
+
+                                <div>
+                                    <h3>Juan Pérez</h3>
+                                    <p>Barbero senior</p>
+                                </div>
+
+                            </button>
+
+
+                            <button class="barber-option">
+
+                                <div class="barber-avatar">
+                                    CR
+                                </div>
+
+                                <div>
+                                    <h3>Carlos Rodríguez</h3>
+                                    <p>Barbero profesional</p>
+                                </div>
+
+                            </button>
+
+
+                            <button class="barber-option">
+
+                                <div class="barber-avatar">
+                                    DM
+                                </div>
+
+                                <div>
+                                    <h3>Mauricio Bermudez</h3>
+                                    <p>Barbero junior</p>
+                                </div>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="booking-step">
+
+                    <span class="step-number">03</span>
+
+                    <div class="step-content">
+
+                        <h2>Selecciona la fecha</h2>
+
+                        <input
+                            type="date"
+                            class="date-input"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="booking-step">
+
+                    <span class="step-number">04</span>
+
+                    <div class="step-content">
+
+                        <h2>Horarios disponibles</h2>
+
+                        <div class="time-options">
+
+                            <button>08:00</button>
+                            <button>09:00</button>
+                            <button>10:00</button>
+                            <button>11:00</button>
+                            <button>12:00</button>
+                            <button>14:00</button>
+                            <button>15:00</button>
+                            <button>16:00</button>
+                            <button>17:00</button>
+                            <button>18:00</button>
+                            <button>19:00</button>
+                            <button>20:00</button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- RESUMEN -->
+
+            <aside class="booking-summary">
+
+                <p>RESUMEN</p>
+
+                <h2>Tu cita</h2>
+
+                <div class="summary-line"></div>
+
+
+                <div class="summary-item">
+
+                    <span>Servicio</span>
+
+                    <strong>Selecciona un servicio</strong>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span>Barbero</span>
+
+                    <strong>Selecciona un barbero</strong>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span>Fecha</span>
+
+                    <strong>Selecciona una fecha</strong>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span>Hora</span>
+
+                    <strong>Selecciona un horario</strong>
+
+                </div>
+
+
+                <div class="summary-total">
+
+                    <span>Total</span>
+
+                    <strong>$0</strong>
+
+                </div>
+
+
+                <button class="confirm-button">
+                    Confirmar cita
+                </button>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+
+    <script src="../js/agenda.js"></script>
+
+</body>
+
+</html>

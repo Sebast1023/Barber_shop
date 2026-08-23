@@ -1,0 +1,246 @@
+/* =========================
+   PÁGINA DE AUTENTICACIÓN
+   ========================= */
+
+.auth-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px 20px;
+
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.82),
+            rgba(0, 0, 0, 0.92)
+        ),
+        url("../img/barberia.jpg");
+
+    background-size: cover;
+    background-position: center;
+}
+
+
+/* =========================
+   TARJETA
+   ========================= */
+
+.auth-card {
+    width: 100%;
+    max-width: 450px;
+
+    padding: 45px;
+
+    background-color: #151515;
+
+    border: 1px solid #292929;
+    border-radius: 10px;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+
+/* =========================
+   LOGO
+   ========================= */
+
+.auth-logo {
+    display: flex;
+    justify-content: center;
+
+    margin-bottom: 30px;
+}
+
+.auth-logo img {
+    width: 100px;
+    height: 100px;
+
+    object-fit: contain;
+}
+
+
+/* =========================
+   ENCABEZADO
+   ========================= */
+
+.auth-header {
+    text-align: center;
+
+    margin-bottom: 35px;
+}
+
+.auth-header p {
+    color: #d4af37;
+
+    font-size: 11px;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 10px;
+}
+
+.auth-header h1 {
+    font-size: 32px;
+
+    margin-bottom: 12px;
+}
+
+.auth-header span {
+    color: #888;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   FORMULARIO
+   ========================= */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    color: #ccc;
+
+    font-size: 13px;
+}
+
+.form-group input {
+    width: 100%;
+
+    padding: 14px 15px;
+
+    background-color: #0f0f0f;
+
+    border: 1px solid #292929;
+    border-radius: 5px;
+
+    color: white;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #d4af37;
+}
+
+
+/* =========================
+   OPCIONES
+   ========================= */
+
+.form-options {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 25px;
+
+    font-size: 12px;
+}
+
+.form-options a {
+    color: #d4af37;
+
+    text-decoration: none;
+}
+
+.remember {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #888;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   BOTÓN
+   ========================= */
+
+.auth-button {
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+    border-radius: 5px;
+
+    background-color: #d4af37;
+
+    color: #111;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.auth-button:hover {
+    background-color: #f0cf62;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   FOOTER
+   ========================= */
+
+.auth-footer {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    margin-top: 30px;
+
+    font-size: 13px;
+
+    color: #777;
+}
+
+.auth-footer a {
+    color: #d4af37;
+
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 500px) {
+
+    .auth-card {
+        padding: 30px 25px;
+    }
+
+}
