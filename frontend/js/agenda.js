@@ -148,12 +148,20 @@ confirmButton.addEventListener("click", async () => {
     const horaEntera = parseInt(appointment.time.split(":")[0]);
 
     // 3. Preparar el JSON para Django
+    const clienteId = localStorage.getItem("cliente_id");
+    
+    if (!clienteId) {
+        alert("Debes iniciar sesión para agendar una cita.");
+        window.location.href = "login.html";
+        return;
+    }
+
     const datosCita = {
         fecha: appointment.date,
         hora_inicio: horaEntera,
         servicio: appointment.servicio_id,
         barbero: appointment.barbero_id,
-        cliente: 1, // ID temporal hasta que conectemos el Login
+        cliente: parseInt(clienteId), // <- Toma el ID real del usuario logueado
         estado: 'PENDIENTE'
     };
 

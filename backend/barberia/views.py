@@ -34,16 +34,14 @@ def crear_cita(request):
 def registro_cliente(request):
     data = request.data
     try:
-        # transaction.atomic garantiza que si falla el cliente, no se cree un usuario fantasma
-        with transaction.atomic(): 
-            # 1. Crear el usuario
+        # 1. Guardar en la Base de Datos (Si algo falla aquí, no se guarda nada)
+        with transaction.atomic():
             nuevo_usuario = Usuario.objects.create(
                 correo=data['correo'],
-                contrasena=data['contrasena'], # Nota: En producción, esto debe ir encriptado
+                contrasena=data['contrasena'],
                 rol='CLIENTE'
             )
             
-            # 2. Crear el cliente vinculado al usuario
             nuevo_cliente = Cliente.objects.create(
                 nombre=data['nombre'],
                 cedula=data['cedula'],
@@ -52,15 +50,21 @@ def registro_cliente(request):
                 usuario=nuevo_usuario
             )
 
-        # 3. Enviar correo de bienvenida
-        send_mail(
-            subject='¡Bienvenido a BarberShop The Gentleman\'s!',
-            message=f'Hola {nuevo_cliente.nombre},\n\nTu cuenta ha sido creada con éxito. Ya puedes iniciar sesión y agendar tus citas.',
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[nuevo_cliente.correo],
-            fail_silently=False,
-        )
+        # 2. Intentar enviar el correo por separado
+        # 2. Intentar enviar el correo por separado
+        try:
+            send_mail(
+                subject='¡Bienvenido a BarberShop The Gentleman\'s!',
+                message=f'Hola {nuevo_cliente.nombre},\n\nTu cuenta ha sido creada con éxito. Ya puedes iniciar sesión y agendar tus citas.',
+                from_email=settings.DEFAULT_FROM_EMAIL,  
+                recipient_list=[nuevo_cliente.correo],
+                fail_silently=False,
+            )
+        except Exception as error_correo:
+            # Si el correo falla, lo imprimimos en la terminal para depurar, pero no rompemos el proceso
+            print(f"La cuenta se creó, pero el correo falló: {error_correo}")
         
+        # 3. Responder éxito al frontend siempre que la BD haya guardado bien
         return Response({"mensaje": "Registro exitoso"}, status=status.HTTP_201_CREATED)
         
     except Exception as e:

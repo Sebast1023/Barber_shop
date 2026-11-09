@@ -129,17 +129,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
 MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
+    "default": {
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {
+            "host": "smtp.gmail.com",
+            "port": 587,
+            "use_tls": True,
+            "username": "barbershooop67@gmail.com",  # Reemplaza con tu correo
+            "password": "wygedwychsawsreq",        # Reemplaza con tu contraseña de aplicación sin espacios
+        }
+    }
 }
 
+DEFAULT_FROM_EMAIL = 'barbershooop67@gmail.com' # El mismo de tu MAILERS
 CORS_ALLOW_ALL_ORIGINS = True
 
-# core/settings.py (al final del archivo)
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'barbershooop67@gmail.com' 
-EMAIL_HOST_PASSWORD = 'wyge dwyc hsaw sreq'
