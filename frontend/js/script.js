@@ -1,6 +1,7 @@
 // js/script.js
 
 document.addEventListener("DOMContentLoaded", () => {
+    verificarSesionIndex();
     cargarServiciosIndex();
     cargarBarberosIndex();
 });
@@ -68,5 +69,40 @@ async function cargarBarberosIndex() {
         });
     } catch (error) {
         console.error("Error cargando los barberos en el inicio:", error);
+    }
+}
+
+// ===============================
+// 3. VERIFICAR SESIÓN EN EL INICIO
+// ===============================
+function verificarSesionIndex() {
+    const navButtons = document.querySelector(".nav-buttons");
+    if (!navButtons) return;
+
+    // Leer los datos de la memoria del navegador
+    const clienteId = localStorage.getItem("cliente_id");
+    const clienteNombre = localStorage.getItem("cliente_nombre");
+
+    if (clienteId) {
+        // Extraemos solo el primer nombre para que el botón no quede tan largo
+        const nombreCorto = clienteNombre ? clienteNombre.split(" ")[0] : "Perfil";
+
+        // Reemplazamos los botones originales por los de usuario logueado
+        navButtons.innerHTML = `
+            <span style="color: #ccc; margin-right: 20px; font-size: 14px;">Hola, ${nombreCorto}</span>
+            <a href="pages/perfil.html" class="btn-login">Mi perfil</a>
+            <button id="btn-logout" class="btn-secondary" style="margin-right: 15px; cursor: pointer; background: transparent;">Cerrar sesión</button>
+            <a href="pages/agendar.html" class="btn-primary">Agendar cita</a>
+        `;
+
+        // Lógica para cerrar sesión
+        document.getElementById("btn-logout").addEventListener("click", () => {
+            // Borramos los datos de la memoria
+            localStorage.removeItem("cliente_id");
+            localStorage.removeItem("cliente_nombre");
+            
+            // Recargamos la página para volver al estado normal
+            window.location.reload();
+        });
     }
 }
