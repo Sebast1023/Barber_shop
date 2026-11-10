@@ -1,0 +1,35 @@
+"""
+URL configuration for core project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/6.1/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path
+from barberia import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/servicios/', views.listar_servicios, name='listar_servicios'),
+    path('api/barberos/', views.listar_barberos, name='listar_barberos'),
+    path('api/citas/crear/', views.crear_cita, name='crear_cita'),
+    path('api/registro/', views.registro_cliente, name='registro_cliente'), 
+    path('api/login/', views.login_general, name='login_general'),
+    path('api/citas/cliente/<int:cliente_id>/', views.listar_citas_cliente, name='listar_citas_cliente'),
+    path('api/citas/cancelar/<int:cita_id>/', views.cancelar_cita, name='cancelar_cita'),
+    path('api/perfil/<int:cliente_id>/', views.obtener_perfil, name='obtener_perfil'),
+    path('api/perfil/actualizar/<int:cliente_id>/', views.actualizar_perfil, name='actualizar_perfil'),
+    path('api/citas/barbero/<int:barbero_id>/', views.listar_citas_barbero, name='listar_citas_barbero'),
+    path('api/citas/completar/<int:cita_id>/', views.completar_cita, name='completar_cita'),
+]
+
