@@ -24,10 +24,12 @@ urlpatterns = [
     path('api/barberos/', views.listar_barberos, name='listar_barberos'),
     path('api/citas/crear/', views.crear_cita, name='crear_cita'),
     path('api/registro/', views.registro_cliente, name='registro_cliente'), 
-    path('api/login/', views.login_cliente, name='login_cliente'),
+    path('api/login/', views.login_general, name='login_general'),
     path('api/citas/cliente/<int:cliente_id>/', views.listar_citas_cliente, name='listar_citas_cliente'),
     path('api/citas/cancelar/<int:cita_id>/', views.cancelar_cita, name='cancelar_cita'),
     path('api/perfil/<int:cliente_id>/', views.obtener_perfil, name='obtener_perfil'),
     path('api/perfil/actualizar/<int:cliente_id>/', views.actualizar_perfil, name='actualizar_perfil'),
+    path('api/citas/barbero/<int:barbero_id>/', views.listar_citas_barbero, name='listar_citas_barbero'),
+    path('api/citas/completar/<int:cita_id>/', views.completar_cita, name='completar_cita'),
 ]
 

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Barbero | Barbería</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/citas.css"> <!-- Reutilizamos tu CSS de citas -->
+</head>
+<body>
+
+    <!-- =========================
+         NAVBAR DEL BARBERO
+         ========================= -->
+    <header>
+        <nav class="navbar">
+            <a href="../index.html" class="logo">
+                <img src="../img/Logo.jpg" alt="Logo de la barbería">
+            </a>
+            <ul class="nav-links">
+                <li><a href="#" style="color: #cda45e;">Panel Principal</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <span id="nombre-barbero" style="color: #ccc; margin-right: 20px; font-size: 14px;">Hola, Barbero</span>
+                <button id="btn-logout-barbero" class="btn-secondary" style="cursor: pointer; background: transparent;">Cerrar sesión</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- =========================
+         PANEL DE CONTROL
+         ========================= -->
+    <main class="appointments-page">
+        <div class="appointments-header">
+            <p>ADMINISTRACIÓN</p>
+            <h1>Agenda de Trabajo</h1>
+            <span>Revisa tus citas asignadas y márcalas como completadas.</span>
+        </div>
+
+        <div class="appointments-container">
+            <section class="appointments-section">
+                <div class="section-heading">
+                    <h2>Citas Pendientes</h2>
+                </div>
+                
+                <!-- Contenedor donde JS inyectará las citas del barbero -->
+                <div id="citas-barbero-list">
+                    <p style="text-align:center; color:#ccc; margin-top:20px;">Cargando tu agenda...</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Script exclusivo para el panel del barbero -->
+    <script src="../js/barbero.js"></script>
+</body>
+</html>

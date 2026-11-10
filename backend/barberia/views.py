@@ -1,15 +1,12 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Servicio, Barbero
 from .serializers import ServicioSerializer, BarberoSerializer
 from rest_framework import status
 from .serializers import CitaSerializer
 from django.db import transaction
 from django.core.mail import send_mail
 from django.conf import settings
-from .models import Usuario, Cliente
-from .models import Cita
-from .models import Cliente
+from .models import Usuario, Cliente, Barbero, Cita, Servicio
 
 @api_view(['GET'])
 def listar_servicios(request):
@@ -74,24 +71,37 @@ def registro_cliente(request):
 
 
 @api_view(['POST'])
-def login_cliente(request):
+def login_general(request):
     data = request.data
     try:
-        # Buscar al usuario por correo y contraseña
+        # Buscamos al usuario sea quien sea
         usuario = Usuario.objects.get(correo=data['correo'], contrasena=data['contrasena'])
         
+        # Si es un CLIENTE, buscamos sus datos en la tabla clientes
         if usuario.rol == 'CLIENTE':
             cliente = Cliente.objects.get(usuario=usuario)
             return Response({
-                "mensaje": "Login exitoso",
-                "id_cliente": cliente.id_cliente,
+                "rol": "CLIENTE",
+                "id": cliente.pk,
                 "nombre": cliente.nombre
             }, status=status.HTTP_200_OK)
+            
+        # Si es un BARBERO, buscamos sus datos en la tabla barberos
+        elif usuario.rol == 'BARBERO':
+            barbero = Barbero.objects.get(usuario=usuario)
+            return Response({
+                "rol": "BARBERO",
+                "id": barbero.pk,
+                "nombre": barbero.nombre
+            }, status=status.HTTP_200_OK)
+            
         else:
-            return Response({"error": "Módulo exclusivo para clientes."}, status=status.HTTP_403_FORBIDDEN)
+            return Response({"error": "Rol de usuario no válido."}, status=status.HTTP_403_FORBIDDEN)
             
     except Usuario.DoesNotExist:
         return Response({"error": "Correo o contraseña incorrectos."}, status=status.HTTP_401_UNAUTHORIZED)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -183,3 +193,39 @@ def actualizar_perfil(request, cliente_id):
         return Response({"error": "Cliente no encontrado"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+from .models import Barbero, Usuario 
+
+@api_view(['GET'])
+def listar_citas_barbero(request, barbero_id):
+    try:
+        # Filtramos solo las citas que están PENDIENTES y asignadas a este barbero
+        citas = Cita.objects.filter(barbero_id=barbero_id, estado='PENDIENTE').order_by('fecha', 'hora_inicio')
+        
+        datos_citas = []
+        for cita in citas:
+            datos_citas.append({
+                "id_cita": cita.pk,
+                "fecha": cita.fecha,
+                "hora_inicio": f"{cita.hora_inicio}:00",
+                "cliente": cita.cliente.nombre,
+                "servicio": cita.servicio.nombre,
+                "precio": cita.servicio.precio
+            })
+            
+        return Response(datos_citas, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def completar_cita(request, cita_id):
+    try:
+        cita = Cita.objects.get(pk=cita_id)
+        if cita.estado == 'PENDIENTE':
+            cita.estado = 'COMPLETADA'
+            cita.save()
+            return Response({"mensaje": "Cita completada con éxito"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Solo se pueden completar citas pendientes."}, status=status.HTTP_400_BAD_REQUEST)
+    except Cita.DoesNotExist:
+        return Response({"error": "La cita no existe."}, status=status.HTTP_404_NOT_FOUND)
