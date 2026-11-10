@@ -25,5 +25,9 @@ urlpatterns = [
     path('api/citas/crear/', views.crear_cita, name='crear_cita'),
     path('api/registro/', views.registro_cliente, name='registro_cliente'), 
     path('api/login/', views.login_cliente, name='login_cliente'),
+    path('api/citas/cliente/<int:cliente_id>/', views.listar_citas_cliente, name='listar_citas_cliente'),
+    path('api/citas/cancelar/<int:cita_id>/', views.cancelar_cita, name='cancelar_cita'),
+    path('api/perfil/<int:cliente_id>/', views.obtener_perfil, name='obtener_perfil'),
+    path('api/perfil/actualizar/<int:cliente_id>/', views.actualizar_perfil, name='actualizar_perfil'),
 ]
 

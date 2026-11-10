@@ -105,9 +105,37 @@ async function cargarBarberos() {
 
 // Inicializar funciones
 document.addEventListener("DOMContentLoaded", () => {
+    verificarSesionNavbar();
     cargarServicios();
     cargarBarberos();
 });
+
+// ===============================
+// VERIFICAR SESIÓN EN EL NAVBAR
+// ===============================
+function verificarSesionNavbar() {
+    const navButtons = document.querySelector(".nav-buttons");
+    if (!navButtons) return;
+
+    const clienteId = localStorage.getItem("cliente_id");
+    const clienteNombre = localStorage.getItem("cliente_nombre");
+
+    if (clienteId) {
+        const nombreCorto = clienteNombre ? clienteNombre.split(" ")[0] : "Perfil";
+
+        navButtons.innerHTML = `
+            <span style="color: #ccc; margin-right: 20px; font-size: 14px;">Hola, ${nombreCorto}</span>
+            <a href="perfil.html" class="btn-login">Mi perfil</a>
+            <button id="btn-logout" class="btn-secondary" style="margin-right: 15px; cursor: pointer; background: transparent;">Cerrar sesión</button>
+        `;
+
+        document.getElementById("btn-logout").addEventListener("click", () => {
+            localStorage.removeItem("cliente_id");
+            localStorage.removeItem("cliente_nombre");
+            window.location.href = "../index.html"; // Al cerrar sesión, lo devolvemos al inicio
+        });
+    }
+}
 
 // ===============================
 // SELECCIONAR FECHA (CÓDIGO ORIGINAL)
