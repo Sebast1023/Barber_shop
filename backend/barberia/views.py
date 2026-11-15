@@ -7,6 +7,7 @@ from django.db import transaction
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import Usuario, Cliente, Barbero, Cita, Servicio
+from datetime import date
 
 @api_view(['GET'])
 def listar_servicios(request):
@@ -22,12 +23,47 @@ def listar_barberos(request):
 
 @api_view(['POST'])
 def crear_cita(request):
+    barbero_id = request.data.get('barbero')
+    fecha = request.data.get('fecha')
+    hora_inicio = request.data.get('hora_inicio')
+
+    # Validar que el horario no esté ya tomado por otra cita activa
+    if barbero_id and fecha and hora_inicio is not None:
+        ya_ocupada = Cita.objects.filter(
+            barbero_id=barbero_id,
+            fecha=fecha,
+            hora_inicio=hora_inicio
+        ).exclude(estado='CANCELADA').exists()
+
+        if ya_ocupada:
+            return Response(
+                {"error": "Ese horario ya fue reservado para este barbero. Por favor elige otro."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
     serializer = CitaSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response({"mensaje": "Cita agendada exitosamente"}, status=status.HTTP_201_CREATED)
-    # Si hay un error (ej. fecha en el pasado, hora inválida), Django devuelve los detalles
+    
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def horas_ocupadas(request):
+    barbero_id = request.GET.get('barbero_id')
+    fecha = request.GET.get('fecha')
+
+    if not barbero_id or not fecha:
+        return Response([], status=status.HTTP_200_OK)
+
+    citas = Cita.objects.filter(
+        barbero_id=barbero_id,
+        fecha=fecha
+    ).exclude(estado='CANCELADA')
+
+    ocupadas = list(citas.values_list('hora_inicio', flat=True))
+    return Response(ocupadas, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def registro_cliente(request):
@@ -238,3 +274,54 @@ def actualizar_estado_cita(request, cita_id):
         print(f"ERROR REAL AL ACTUALIZAR CITA: {e}")
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+from datetime import date
+
+@api_view(['GET'])
+def historial_barbero(request, barbero_id):
+    hoy = date.today()
+    try:
+        mes = int(request.GET.get('mes', hoy.month))
+        anio = int(request.GET.get('anio', hoy.year))
+
+        citas = Cita.objects.filter(
+            barbero_id=barbero_id,
+            fecha__year=anio,
+            fecha__month=mes,
+            estado__in=['ATENDIDA', 'NO ASISTIO']
+        ).select_related('cliente', 'servicio').order_by('-fecha', '-hora_inicio')
+
+        total_ingresos = 0
+        total_atendidas = 0
+        total_no_asistio = 0
+        lista_citas = []
+
+        for cita in citas:
+            precio = int(cita.servicio.precio)
+            if cita.estado == 'ATENDIDA':
+                total_ingresos += precio
+                total_atendidas += 1
+            elif cita.estado == 'NO ASISTIO':
+                total_no_asistio += 1
+
+            lista_citas.append({
+                "id_cita": cita.pk,
+                "fecha": cita.fecha,
+                "hora_inicio": f"{cita.hora_inicio}:00",
+                "cliente": cita.cliente.nombre,
+                "servicio": cita.servicio.nombre,
+                "precio": precio,
+                "estado": cita.estado
+            })
+
+        return Response({
+            "mes": mes,
+            "anio": anio,
+            "resumen": {
+                "total_ingresos": total_ingresos,
+                "atendidas": total_atendidas,
+                "no_asistio": total_no_asistio
+            },
+            "citas": lista_citas
+        }, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

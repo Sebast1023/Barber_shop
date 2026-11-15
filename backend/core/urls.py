@@ -31,5 +31,7 @@ urlpatterns = [
     path('api/perfil/actualizar/<int:cliente_id>/', views.actualizar_perfil, name='actualizar_perfil'),
     path('api/citas/barbero/<int:barbero_id>/', views.listar_citas_barbero, name='listar_citas_barbero'),
     path('api/citas/completar/<int:cita_id>/', views.actualizar_estado_cita, name='completar_cita'),
+    path('api/citas/ocupadas/', views.horas_ocupadas, name='horas_ocupadas'),
+    path('api/citas/barbero/<int:barbero_id>/historial/', views.historial_barbero, name='historial_barbero'),
 ]
 

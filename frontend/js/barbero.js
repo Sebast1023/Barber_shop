@@ -1,3 +1,11 @@
+const fechaActual = new Date();
+let mesSeleccionado = fechaActual.getMonth() + 1; // 1 - 12
+let anioSeleccionado = fechaActual.getFullYear();
+
+const NOMBRES_MESES = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+];
 document.addEventListener("DOMContentLoaded", () => {
     verificarSesionBarbero();
 });
@@ -23,6 +31,8 @@ async function verificarSesionBarbero() {
     });
 
     cargarCitasBarbero(barberoId);
+    configurarNavegacionMeses(barberoId);
+    cargarHistorialBarbero(barberoId);
 }
 
 async function cargarCitasBarbero(barberoId) {
@@ -100,6 +110,12 @@ async function actualizarEstadoCita(idCita, nuevoEstado) {
 
         if (response.ok) {
             alert(`Cita marcada como ${nuevoEstado}.`);
+            if (response.ok) {
+                alert(`Cita marcada como ${nuevoEstado}.`);
+                const barberoId = localStorage.getItem("barbero_id");
+                cargarCitasBarbero(barberoId);
+                cargarHistorialBarbero(barberoId);
+            }
             cargarCitasBarbero(localStorage.getItem("barbero_id"));
         } else {
             const data = await response.json();
@@ -108,5 +124,101 @@ async function actualizarEstadoCita(idCita, nuevoEstado) {
     } catch (error) {
         console.error(error);
         alert("Error de conexión.");
+    }
+}
+
+function configurarNavegacionMeses(barberoId) {
+    const btnAnterior = document.getElementById("btn-mes-anterior");
+    const btnSiguiente = document.getElementById("btn-mes-siguiente");
+
+    if (btnAnterior) {
+        btnAnterior.addEventListener("click", () => {
+            mesSeleccionado--;
+            if (mesSeleccionado < 1) {
+                mesSeleccionado = 12;
+                anioSeleccionado--;
+            }
+            cargarHistorialBarbero(barberoId);
+        });
+    }
+
+    if (btnSiguiente) {
+        btnSiguiente.addEventListener("click", () => {
+            mesSeleccionado++;
+            if (mesSeleccionado > 12) {
+                mesSeleccionado = 1;
+                anioSeleccionado++;
+            }
+            cargarHistorialBarbero(barberoId);
+        });
+    }
+}
+
+async function cargarHistorialBarbero(barberoId) {
+    const labelMes = document.getElementById("mes-actual-label");
+    const contenedor = document.getElementById("historial-barbero-list");
+    if (!contenedor) return;
+
+    if (labelMes) {
+        labelMes.textContent = `${NOMBRES_MESES[mesSeleccionado - 1]} ${anioSeleccionado}`;
+    }
+
+    try {
+        const response = await fetch(
+            `http://127.0.0.1:8000/api/citas/barbero/${barberoId}/historial/?mes=${mesSeleccionado}&anio=${anioSeleccionado}`
+        );
+        const data = await response.json();
+
+        // Actualizar tarjetas de resumen
+        document.getElementById("resumen-ingresos").textContent = `$${data.resumen.total_ingresos.toLocaleString("es-CO")}`;
+        document.getElementById("resumen-atendidas").textContent = data.resumen.atendidas;
+        document.getElementById("resumen-no-asistio").textContent = data.resumen.no_asistio;
+
+        contenedor.innerHTML = "";
+
+        if (data.citas.length === 0) {
+            contenedor.innerHTML = `<p style="text-align:center; color:#888; margin-top:20px;">No hay registros cerrados en ${NOMBRES_MESES[mesSeleccionado - 1]} ${anioSeleccionado}.</p>`;
+            return;
+        }
+
+        data.citas.forEach(cita => {
+            const precioFormat = cita.precio.toLocaleString("es-CO");
+            const fechaObj = new Date(cita.fecha + "T00:00:00");
+            const dia = fechaObj.getDate().toString().padStart(2, '0');
+            const mesCorto = fechaObj.toLocaleString('es-ES', { month: 'short' }).toUpperCase();
+
+            const esAtendida = cita.estado === 'ATENDIDA';
+            const colorBadge = esAtendida ? '#28a745' : '#dc3545';
+            const iconoEstado = esAtendida ? 'ATENDIDA' : 'NO ASISTIÓ';
+
+            const articulo = document.createElement("article");
+            articulo.className = "appointment-item";
+            articulo.style.opacity = "0.9";
+            articulo.innerHTML = `
+                <div class="appointment-calendar">
+                    <span>${mesCorto}</span>
+                    <strong>${dia}</strong>
+                </div>
+                <div class="appointment-details">
+                    <div class="appointment-title">
+                        <div>
+                            <h3>${cita.servicio}</h3>
+                            <span class="appointment-status" style="color: ${colorBadge}; font-weight: bold;">${iconoEstado}</span>
+                        </div>
+                        <strong class="appointment-price" style="color: ${esAtendida ? '#cda45e' : '#777'}; text-decoration: ${esAtendida ? 'none' : 'line-through'};">
+                            $${precioFormat}
+                        </strong>
+                    </div>
+                    <div class="appointment-data">
+                        <span>Cliente: <strong>${cita.cliente}</strong></span>
+                        <span>Hora: <strong>${cita.hora_inicio}</strong></span>
+                    </div>
+                </div>
+            `;
+            contenedor.appendChild(articulo);
+        });
+    } catch (error) {
+        console.error("Error cargando historial del barbero:", error);
+        contenedor.innerHTML = "<p style='color:#dc3545; text-align:center;'>Error al cargar el historial mensual.</p>";
     }
 }
