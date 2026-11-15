@@ -48,6 +48,42 @@
                     <p style="text-align:center; color:#ccc; margin-top:20px;">Cargando tu agenda...</p>
                 </div>
             </section>
+            <!-- =========================
+                 HISTORIAL Y CAJA MENSUAL
+                 ========================= -->
+            <section class="appointments-section" style="margin-top: 45px;">
+                <div class="section-heading" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                    <h2>Historial y Caja Mensual</h2>
+
+                    <!-- Navegador de meses -->
+                    <div style="display: flex; align-items: center; gap: 12px; background: #1a1a1a; padding: 8px 14px; border-radius: 8px; border: 1px solid #333;">
+                        <button id="btn-mes-anterior" style="background: transparent; border: none; color: #cda45e; font-size: 16px; cursor: pointer; padding: 2px 6px;">◀</button>
+                        <strong id="mes-actual-label" style="color: #fff; min-width: 140px; text-align: center; font-size: 15px;">Noviembre 2026</strong>
+                        <button id="btn-mes-siguiente" style="background: transparent; border: none; color: #cda45e; font-size: 16px; cursor: pointer; padding: 2px 6px;">▶</button>
+                    </div>
+                </div>
+
+                <!-- Tarjetas de resumen del mes -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin: 20px 0;">
+                    <div style="background: #1a1a1a; border: 1px solid #333; border-left: 4px solid #cda45e; padding: 16px; border-radius: 8px;">
+                        <span style="color: #aaa; font-size: 13px; display: block;">Ingresos del mes</span>
+                        <strong id="resumen-ingresos" style="color: #cda45e; font-size: 22px;">$0</strong>
+                    </div>
+                    <div style="background: #1a1a1a; border: 1px solid #333; border-left: 4px solid #28a745; padding: 16px; border-radius: 8px;">
+                        <span style="color: #aaa; font-size: 13px; display: block;">Citas atendidas</span>
+                        <strong id="resumen-atendidas" style="color: #fff; font-size: 22px;">0</strong>
+                    </div>
+                    <div style="background: #1a1a1a; border: 1px solid #333; border-left: 4px solid #dc3545; padding: 16px; border-radius: 8px;">
+                        <span style="color: #aaa; font-size: 13px; display: block;">No asistieron</span>
+                        <strong id="resumen-no-asistio" style="color: #fff; font-size: 22px;">0</strong>
+                    </div>
+                </div>
+
+                <!-- Lista de citas cerradas del mes -->
+                <div id="historial-barbero-list">
+                    <p style="text-align:center; color:#ccc; margin-top:20px;">Cargando historial...</p>
+                </div>
+            </section>
         </div>
     </main>
 
