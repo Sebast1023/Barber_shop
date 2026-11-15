@@ -218,14 +218,23 @@ def listar_citas_barbero(request, barbero_id):
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PATCH'])
-def completar_cita(request, cita_id):
+def actualizar_estado_cita(request, cita_id):
     try:
         cita = Cita.objects.get(pk=cita_id)
+        nuevo_estado = request.data.get('estado', 'ATENDIDA')
+
+        if nuevo_estado not in ['ATENDIDA', 'NO ASISTIO']:
+            return Response({"error": "Estado no permitido."}, status=status.HTTP_400_BAD_REQUEST)
+
         if cita.estado == 'PENDIENTE':
-            cita.estado = 'COMPLETADA'
+            cita.estado = nuevo_estado
             cita.save()
-            return Response({"mensaje": "Cita completada con éxito"}, status=status.HTTP_200_OK)
+            return Response({"mensaje": f"Cita marcada como {nuevo_estado}"}, status=status.HTTP_200_OK)
         else:
-            return Response({"error": "Solo se pueden completar citas pendientes."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Solo se pueden actualizar citas pendientes."}, status=status.HTTP_400_BAD_REQUEST)
     except Cita.DoesNotExist:
         return Response({"error": "La cita no existe."}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        print(f"ERROR REAL AL ACTUALIZAR CITA: {e}")
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+

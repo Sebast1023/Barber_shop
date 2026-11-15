@@ -66,9 +66,12 @@ async function cargarCitasBarbero(barberoId) {
                         <span style="color: #cda45e;">👤 Cliente: <strong>${cita.cliente}</strong></span>
                         <span>🕐 Hora: <strong>${cita.hora_inicio}</strong></span>
                     </div>
-                    <div class="appointment-actions" style="margin-top: 15px;">
-                        <button onclick="completarCita(${cita.id_cita})" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s;">
-                            ✔️ Marcar como Completada
+                    <div class="appointment-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+                        <button onclick="actualizarEstadoCita(${cita.id_cita}, 'ATENDIDA')" style="background-color: #28a745; color: white; border: none; padding: 10px 18px; font-weight: bold; border-radius: 5px; cursor: pointer;">
+                            Atendida
+                        </button>
+                        <button onclick="actualizarEstadoCita(${cita.id_cita}, 'NO ASISTIO')" style="background-color: #dc3545; color: white; border: none; padding: 10px 18px; font-weight: bold; border-radius: 5px; cursor: pointer;">
+                            No asistió
                         </button>
                     </div>
                 </div>
@@ -81,22 +84,26 @@ async function cargarCitasBarbero(barberoId) {
     }
 }
 
-async function completarCita(idCita) {
-    const confirmar = confirm("¿El cliente ya terminó su servicio? Se marcará como COMPLETADA.");
-    if (!confirmar) return;
+async function actualizarEstadoCita(idCita, nuevoEstado) {
+    const mensaje = nuevoEstado === 'ATENDIDA'
+        ? "¿Confirmas que el cliente ya fue atendido?"
+        : "¿Confirmas que el cliente NO asistió a la cita?";
+
+    if (!confirm(mensaje)) return;
 
     try {
         const response = await fetch(`http://127.0.0.1:8000/api/citas/completar/${idCita}/`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ estado: nuevoEstado })
         });
 
         if (response.ok) {
-            alert("¡Excelente trabajo! Cita completada.");
-            // Recargamos la lista para que desaparezca
-            cargarCitasBarbero(localStorage.getItem("barbero_id")); 
+            alert(`Cita marcada como ${nuevoEstado}.`);
+            cargarCitasBarbero(localStorage.getItem("barbero_id"));
         } else {
-            alert("Hubo un error al actualizar la base de datos.");
+            const data = await response.json();
+            alert("No se pudo actualizar: " + (data.error || "Error en el servidor."));
         }
     } catch (error) {
         console.error(error);
