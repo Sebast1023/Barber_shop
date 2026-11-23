@@ -79,7 +79,7 @@ async function cargarMisCitas() {
                 articulo.className = "history-item";
                 
                 // Pintamos de verde si está completada, o de otro color si está cancelada
-                const claseEstado = cita.estado === 'COMPLETADA' ? 'completed-status' : 'appointment-status'; 
+                const claseEstado = cita.estado === 'ATENDIDA' ? 'completed-status' : 'appointment-status';
 
                 articulo.innerHTML = `
                     <div>

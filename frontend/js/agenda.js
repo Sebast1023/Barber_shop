@@ -95,6 +95,7 @@ async function cargarBarberos() {
                 appointment.barber = barbero.nombre;
                 appointment.barbero_id = barbero.id_barbero || barbero.id;
                 barberSummary.textContent = barbero.nombre;
+                verificarDisponibilidad();
             });
             barbersContainer.appendChild(btn);
         });
@@ -138,7 +139,52 @@ function verificarSesionNavbar() {
 }
 
 // ===============================
-// SELECCIONAR FECHA (CÓDIGO ORIGINAL)
+// VERIFICAR DISPONIBILIDAD DE HORAS
+// ===============================
+async function verificarDisponibilidad() {
+    if (!appointment.barbero_id || !appointment.date) return;
+
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/api/citas/ocupadas/?barbero_id=${appointment.barbero_id}&fecha=${appointment.date}`);
+        const horasOcupadas = await response.json(); // Ej: [9, 14]
+
+        timeOptions.forEach(option => {
+            // Guardamos el texto original la primera vez (ej. "14:00")
+            if (!option.dataset.originalText) {
+                option.dataset.originalText = option.textContent.trim();
+            }
+
+            const textoOriginal = option.dataset.originalText;
+            const horaEntera = parseInt(textoOriginal.split(":")[0]);
+
+            if (horasOcupadas.includes(horaEntera)) {
+                option.disabled = true;
+                option.classList.remove("selected");
+                option.textContent = `${textoOriginal} (Ocupado)`;
+                option.style.opacity = "0.45";
+                option.style.cursor = "not-allowed";
+                option.style.textDecoration = "line-through";
+
+                // Si el usuario tenía seleccionada esa hora antes de cambiar de fecha/barbero, la limpiamos
+                if (appointment.time === textoOriginal) {
+                    appointment.time = null;
+                    timeSummary.textContent = "Por definir";
+                }
+            } else {
+                option.disabled = false;
+                option.textContent = textoOriginal;
+                option.style.opacity = "1";
+                option.style.cursor = "pointer";
+                option.style.textDecoration = "none";
+            }
+        });
+    } catch (error) {
+        console.error("Error verificando disponibilidad:", error);
+    }
+}
+
+// ===============================
+// SELECCIONAR FECHA
 // ===============================
 dateInput.addEventListener("change", () => {
     appointment.date = dateInput.value;
@@ -146,17 +192,21 @@ dateInput.addEventListener("change", () => {
         const date = new Date(appointment.date + "T00:00:00");
         const formattedDate = date.toLocaleDateString("es-CO", {day: "2-digit", month: "2-digit", year: "numeric"});
         dateSummary.textContent = formattedDate;
+
+        verificarDisponibilidad(); // <-- Consulta horas al cambiar fecha
     }
 });
 
 // ===============================
-// SELECCIONAR HORA (CÓDIGO ORIGINAL)
+// SELECCIONAR HORA
 // ===============================
 timeOptions.forEach(option => {
     option.addEventListener("click", () => {
+        if (option.disabled) return; // Evita seleccionar botones bloqueados
+
         timeOptions.forEach(item => { item.classList.remove("selected"); });
         option.classList.add("selected");
-        appointment.time = option.textContent;
+        appointment.time = option.dataset.originalText || option.textContent.trim();
         timeSummary.textContent = appointment.time;
     });
 });
@@ -209,7 +259,7 @@ confirmButton.addEventListener("click", async () => {
         } else {
             const errores = await response.json();
             console.error("Errores desde Django:", errores);
-            alert("Por favor selecciona el servicio, barbero, fecha y horario.");
+            alert(errores.error || "No se pudo agendar la cita. Verifica que la fecha y hora sean válidas.");
         }
     } catch (error) {
         console.error("Error de conexión:", error);
